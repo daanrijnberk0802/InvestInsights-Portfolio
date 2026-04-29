@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Rijnberk InvestInsights</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    background: #f9f7f4;
+    color: #1a1a1a;
+    padding: 48px 24px 80px;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  header {
+    border-bottom: 1px solid #e0dbd4;
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+
+  .pub-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #8a8278;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -.02em;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin-bottom: 10px;
+  }
+
+  .meta {
+    font-size: 13px;
+    color: #8a8278;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .meta span { display: flex; align-items: center; gap: 6px; }
+
+  .dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: #c8c2ba;
+    display: inline-block;
+  }
+
+  .disclaimer {
+    font-size: 12px;
+    color: #a09890;
+    background: #f1ede8;
+    border-left: 2px solid #d4cec7;
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 40px;
+    line-height: 1.6;
+  }
+
+  section { margin-bottom: 48px; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0dbd4;
+  }
+
+  h2 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #4a4540;
+  }
+
+  .section-note {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #a09890;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  .alloc-row {
+    display: grid;
+    grid-template-columns: 100px 56px 1fr;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ebe6e0;
+  }
+
+  .alloc-row:last-child { border-bottom: none; }
+
+  .ticker {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+  }
+
+  .ticker.cash { color: #a09890; }
+
+  .weight {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: #4a4540;
+    text-align: right;
+  }
+
+  .bar-track {
+    height: 4px;
+    background: #e8e3dd;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 4px;
+    border-radius: 2px;
+    background: #2d6a4f;
+  }
+
+  .bar-fill.cash { background: #c8c2ba; }
+
+  thead tr th {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #a09890;
+    font-weight: 400;
+    padding: 0 0 10px;
+    text-align: left;
+    border-bottom: 1px solid #e0dbd4;
+  }
+
+  thead tr th:nth-child(2) { text-align: right; }
+  thead tr th:nth-child(3) { text-align: right; }
+  thead tr th:nth-child(4) { text-align: left; padding-left: 16px; }
+
+  tbody tr td {
+    padding: 10px 0;
+    font-size: 13px;
+    border-bottom: 1px solid #ebe6e0;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  .tx-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: #a09890;
+    white-space: nowrap;
+  }
+
+  .tx-action {
+    text-align: right;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+
+  .badge-buy  { background: #d8f0e4; color: #1a5c38; }
+  .badge-add  { background: #ddeaf8; color: #1a3d6b; }
+  .badge-trim { background: #fcefd8; color: #7a4e10; }
+  .badge-sell { background: #fde0e0; color: #7a1a1a; }
+
+  .tx-ticker {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1a1a1a;
+    text-align: right;
+  }
+
+  .tx-note {
+    font-size: 13px;
+    color: #6a6460;
+    padding-left: 16px;
+  }
+
+  .empty-state {
+    font-size: 13px;
+    color: #a09890;
+    padding: 24px 0;
+    font-style: italic;
+  }
+
+  footer {
+    border-top: 1px solid #e0dbd4;
+    padding-top: 24px;
+    font-size: 12px;
+    color: #a09890;
+    line-height: 1.7;
+  }
+
+  footer a { color: #6a6460; }
+
+  @media (max-width: 480px) {
+    .alloc-row { grid-template-columns: 80px 48px 1fr; gap: 10px; }
+    h1 { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="pub-label">Rijnberk InvestInsights</div>
+  <h1>Portfolio</h1>
+  <div class="meta">
+    <span><span class="dot"></span> Last updated: 29 April 2025</span>
+    <span><span class="dot"></span> 16 positions</span>
+  </div>
+</header>
+
+<p class="disclaimer">
+  Weights are approximate and updated weekly. This page is for informational purposes only and does not constitute investment advice. Always do your own research.
+</p>
+
+<section>
+  <div class="section-header">
+    <h2>Allocation</h2>
+    <span class="section-note">% of portfolio</span>
+  </div>
+
+  <div class="alloc-row">
+    <span class="ticker">VWRL</span>
+    <span class="weight">20.3%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker cash">CASH</span>
+    <span class="weight">10.3%</span>
+    <div class="bar-track"><div class="bar-fill cash" style="width:50.7%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">UBER</span>
+    <span class="weight">8.2%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:40.4%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">NOW</span>
+    <span class="weight">7.8%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:38.4%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">MELI</span>
+    <span class="weight">7.4%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:36.5%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">ASML</span>
+    <span class="weight">5.6%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:27.6%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">BN</span>
+    <span class="weight">5.6%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:27.6%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">TSM</span>
+    <span class="weight">4.8%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:23.6%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">GOOGL</span>
+    <span class="weight">4.4%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:21.7%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">AVGO</span>
+    <span class="weight">4.3%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:21.2%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">SU</span>
+    <span class="weight">4.2%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:20.7%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">RMS</span>
+    <span class="weight">4.0%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:19.7%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">NFLX</span>
+    <span class="weight">3.9%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:19.2%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">GE</span>
+    <span class="weight">3.7%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:18.2%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">LRCX</span>
+    <span class="weight">3.2%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:15.8%"></div></div>
+  </div>
+  <div class="alloc-row">
+    <span class="ticker">CRWD</span>
+    <span class="weight">2.3%</span>
+    <div class="bar-track"><div class="bar-fill" style="width:11.3%"></div></div>
+  </div>
+</section>
+
+<section>
+  <div class="section-header">
+    <h2>Trade log</h2>
+    <span class="section-note">Most recent first</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th style="text-align:right">Action</th>
+        <th style="text-align:right">Ticker</th>
+        <th style="text-align:left;padding-left:16px">Note</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="tx-date" colspan="4">
+          <span class="empty-state">No trades logged yet — check back soon.</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<footer>
+  Weights are approximate and reviewed weekly. This is not investment advice.<br>
+  <a href="https://substack.com/rijnberkinvestinsights">Rijnberk InvestInsights</a> · Updated 29 April 2025
+</footer>
+
+</body>
+</html>
